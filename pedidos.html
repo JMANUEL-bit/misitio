@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller del Árbol - Pedidos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="pedidos.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-container">
+                <img src="logo_car.png" alt="Logo Taller del Árbol" class="logo-img">
+            </a>
+            <div class="brand-title">
+                <h1>Taller del árbol</h1>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">INICIO</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="pedidos.html" class="active">Pedidos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="orders-main">
+        <div class="orders-layout">
+            <div class="order-box-container" id="orders-display">
+            </div>
+
+            <div class="orders-actions">
+                <a href="#" class="action-pill">Dejar Una Reseña</a>
+                <a href="productos.html" class="action-pill">Comprar De Nuevo</a>
+                <a href="#" class="action-pill">Devolución/Reembolso</a>
+                <a href="#" class="action-pill">Rastrear Pedido</a>
+                <button type="button" onclick="borrarPedidos()" class="action-pill" style="background-color: #8D3834; border: none; cursor: pointer;">Borrar Historial</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="social-icons">
+            <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://web.whatsapp.com/" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Política de privacidad</a> | 
+            <a href="#">Términos y condiciones</a> | 
+            <a href="#">Acerca de CARPINTERÍA</a> | 
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+
+    <script>
+        const ordersDisplay = document.getElementById('orders-display');
+        const pedidos = JSON.parse(localStorage.getItem('pedidosPagados')) || [];
+
+        if (pedidos.length > 0) {
+            let contenidoHTML = '';
+            pedidos.forEach(item => {
+                contenidoHTML += `
+                    <div class="order-item-card-mini">
+                        <i class="fa-solid ${item.icono}"></i>
+                        <div class="order-item-info">
+                            <h4>${item.nombre}</h4>
+                            <p>${item.material} - ${item.color}</p>
+                            <span>${item.precioTexto}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            ordersDisplay.innerHTML = contenidoHTML;
+        } else {
+            ordersDisplay.innerHTML = `
+                <p class="empty-orders">Aún no tienes pedidos pagados.</p>
+            `;
+        }
+
+        function borrarPedidos() {
+            localStorage.removeItem('pedidosPagados');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

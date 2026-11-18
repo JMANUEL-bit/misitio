@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller del Árbol - Detalle del Producto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="detalle.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-container">
+                <img src="logo_car.png" alt="Logo Taller del Árbol" class="logo-img">
+            </a>
+            <div class="brand-title">
+                <h1>Taller del árbol</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="detail-main">
+        <div class="product-showcase">
+            <div class="product-large-view">
+                <i class="fa-solid fa-table" id="prod-icon"></i>
+            </div>
+            
+            <div class="product-info-panel">
+                <div class="price-tag">
+                    <h2 id="prod-title" style="font-size: 1.5rem; margin-bottom: 5px;">Mesa Clásica</h2>
+                    <span class="price-label">PRECIO</span>
+                    <span class="price-value" id="prod-price-text">$2,800</span>
+                </div>
+
+                <div class="specs-section">
+                    <h2>ESPECIFICACIONES</h2>
+                    <div class="specs-list" style="display: flex; flex-direction: column; gap: 10px;">
+                        <select id="select-medidas" class="spec-pill" style="width: 100%; border: none; text-align-last: center; cursor: pointer;">
+                            <option value="90 cm² - 9.7 cm - 50 cm">90 cm² - 9.7 cm - 50 cm</option>
+                            <option value="120 cm² - 10 cm - 60 cm">120 cm² - 10 cm - 60 cm</option>
+                            <option value="150 cm² - 12 cm - 70 cm">150 cm² - 12 cm - 70 cm</option>
+                        </select>
+                        
+                        <select id="select-material" class="spec-pill" style="width: 100%; border: none; text-align-last: center; cursor: pointer;">
+                            <option value="Roble">Roble</option>
+                            <option value="Pino">Pino</option>
+                            <option value="Cedro">Cedro</option>
+                        </select>
+                        
+                        <select id="select-color" class="spec-pill" style="width: 100%; border: none; text-align-last: center; cursor: pointer;">
+                            <option value="Blanco">Blanco</option>
+                            <option value="Nogal">Nogal</option>
+                            <option value="Natural">Natural</option>
+                        </select>
+                    </div>
+                </div>
+
+                <a href="carrito.html" class="add-to-cart-btn" id="btn-agregar">
+                    <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="social-icons">
+            <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://web.whatsapp.com/" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Política de privacidad</a> | 
+            <a href="#">Términos y condiciones</a> | 
+            <a href="#">Acerca de CARPINTERÍA</a> | 
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+
+    <script>
+        const catalogo = [
+            { nombre: 'Mesa Clásica', precio: 2800, icono: 'fa-table' },
+            { nombre: 'Sillón Individual', precio: 3500, icono: 'fa-couch' },
+            { nombre: 'Escritorio Ejecutivo', precio: 4200, icono: 'fa-desktop' },
+            { nombre: 'Base de Cama', precio: 5400, icono: 'fa-bed' },
+            { nombre: 'Silla Comedor', precio: 1200, icono: 'fa-chair' },
+            { nombre: 'Estante Librero', precio: 3100, icono: 'fa-book-open' },
+            { nombre: 'Ropero Clásico', precio: 6800, icono: 'fa-door-closed' },
+            { nombre: 'Buró de Noche', precio: 1650, icono: 'fa-box-archive' }
+        ];
+
+        const params = new URLSearchParams(window.location.search);
+        const id = parseInt(params.get('id'));
+        const muebleActual = catalogo[id] || catalogo[0];
+
+        document.getElementById('prod-title').innerText = muebleActual.nombre;
+        document.getElementById('prod-price-text').innerText = '$' + muebleActual.precio.toLocaleString();
+        document.getElementById('prod-icon').className = 'fa-solid ' + muebleActual.icono;
+
+        document.getElementById('btn-agregar').addEventListener('click', function(e) {
+            e.preventDefault();
+            const productoCarrito = {
+                nombre: muebleActual.nombre,
+                medidas: document.getElementById('select-medidas').value,
+                material: document.getElementById('select-material').value,
+                color: document.getElementById('select-color').value,
+                precio: muebleActual.precio,
+                precioTexto: '$' + muebleActual.precio.toLocaleString(),
+                icono: muebleActual.icono
+            };
+
+            let carrito = JSON.parse(localStorage.getItem('carritoTaller')) || [];
+            carrito.push(productoCarrito);
+            localStorage.setItem('carritoTaller', JSON.stringify(carrito));
+            
+            window.location.href = 'carrito.html';
+        });
+    </script>
+</body>
+</html>

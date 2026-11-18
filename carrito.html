@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller del Árbol - Carrito</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="carrito.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-container">
+                <img src="logo_car.png" alt="Logo Taller del Árbol" class="logo-img">
+            </a>
+            <div class="brand-title">
+                <h1>Taller del árbol</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="cart-main">
+        <h2 class="cart-title">CARRITO</h2>
+
+        <div id="cart-container">
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="social-icons">
+            <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://web.whatsapp.com/" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Política de privacidad</a> | 
+            <a href="#">Términos y condiciones</a> | 
+            <a href="#">Acerca de Taller del arbol</a> | 
+            <a href="#">Contacto</a>
+        </div>
+    </footer>
+
+    <script>
+        const container = document.getElementById('cart-container');
+        let carrito = JSON.parse(localStorage.getItem('carritoTaller')) || [];
+
+        if (carrito.length > 0) {
+            let totalMonto = 0;
+            let contenidoHTML = '<div style="display: flex; flex-direction: column; gap: 25px;">';
+            
+            carrito.forEach((prod, index) => {
+                totalMonto += prod.precio;
+                contenidoHTML += `
+                    <div class="cart-layout" style="margin-bottom: 0;">
+                        <div class="cart-item-card" style="width: 100%;">
+                            <div class="item-icon-box">
+                                <i class="fa-solid ${prod.icono}"></i>
+                            </div>
+                            <div class="item-details" style="flex: 1;">
+                                <h3>${prod.nombre}</h3>
+                                <p>${prod.medidas}</p>
+                                <p>${prod.material}</p>
+                                <p>${prod.color}</p>
+                                <button onclick="eliminarProducto(${index})" style="background: none; border: none; color: #8D3834; font-weight: 600; cursor: pointer; margin-top: 8px; font-size: 0.9rem;">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            contenidoHTML += `
+                <aside class="cart-summary-box" style="width: 100%; max-width: 400px; margin-left: auto; margin-top: 10px;">
+                    <div class="summary-row">
+                        <span>ARTÍCULOS</span>
+                        <span>${carrito.length}</span>
+                    </div>
+                    <hr class="summary-divider">
+                    <div class="summary-row">
+                        <span>MONTO</span>
+                        <span>$${totalMonto.toLocaleString()}</span>
+                    </div>
+                    <button type="button" onclick="procesarPago()" class="pay-btn" style="border: none; cursor: pointer;">PAGAR</button>
+                </aside>
+            `;
+
+            contenidoHTML += '</div>';
+            container.innerHTML = contenidoHTML;
+        } else {
+            container.innerHTML = `
+                <p style="text-align: center; font-size: 1.1rem; color: #666;">
+                    Tu carrito está vacío. <a href="productos.html" style="color: var(--primary-color);">Ver productos</a>
+                </p>
+            `;
+        }
+
+        function eliminarProducto(index) {
+            carrito.splice(index, 1);
+            localStorage.setItem('carritoTaller', JSON.stringify(carrito));
+            location.reload();
+        }
+
+        function procesarPago() {
+            let pedidosAnteriores = JSON.parse(localStorage.getItem('pedidosPagados')) || [];
+            let nuevosPedidos = pedidosAnteriores.concat(carrito);
+            
+            localStorage.setItem('pedidosPagados', JSON.stringify(nuevosPedidos));
+            localStorage.removeItem('carritoTaller');
+            
+            window.location.href = 'pedidos.html';
+        }
+    </script>
+</body>
+</html>
